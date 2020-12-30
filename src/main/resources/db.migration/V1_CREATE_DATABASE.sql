@@ -1,0 +1,1 @@
+CREATE database teams_manager;
