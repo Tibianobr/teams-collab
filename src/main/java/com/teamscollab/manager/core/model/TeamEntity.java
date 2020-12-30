@@ -1,6 +1,7 @@
 package com.teamscollab.manager.core.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "team", schema = "public")
@@ -40,4 +41,5 @@ public class TeamEntity {
     public void setAcron(String acron) {
         this.acron = acron;
     }
+
 }
