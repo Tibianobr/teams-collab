@@ -5,6 +5,7 @@ import com.teamscollab.manager.core.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,5 +44,39 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<TeamEntity> listAllTeams() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public TeamEntity listById (Integer id) {
+        return teamRepository.getOne(id);
+    }
+
+    @Override
+    public List<TeamEntity> mostWinnerMostLoser() {
+
+        List<TeamEntity> teamsToCompare = listAllTeams();
+
+        // Condição para caso não existam times
+        if(teamsToCompare.isEmpty())
+            return null;
+
+        TeamEntity winningTeam = new TeamEntity();
+        TeamEntity losingTeam = new TeamEntity();
+
+        for(TeamEntity comparingTeam : teamsToCompare) {
+            if (comparingTeam.getWins() > winningTeam.getWins()) {
+                winningTeam = comparingTeam;
+            }
+
+            if (comparingTeam.getLosses() > losingTeam.getLosses()) {
+                losingTeam = comparingTeam;
+            }
+        }
+
+        List<TeamEntity> winnerLoser = new ArrayList<>();
+        winnerLoser.add(winningTeam);
+        winnerLoser.add(losingTeam);
+
+        return winnerLoser;
     }
 }
