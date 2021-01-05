@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/team")
 public class TeamController {
@@ -49,4 +51,24 @@ public class TeamController {
         return new ResponseEntity<>(teamService.listAllTeams(),HttpStatus.OK);
     }
 
+    // GET TEAM
+    @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> listById(@PathVariable Integer id) {
+        TeamEntity savedTeam = teamService.listById(id);
+
+        if (savedTeam.getId() != null)
+            return new ResponseEntity<>(savedTeam, HttpStatus.FOUND);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
+    public ResponseEntity<?> dataPeaks() {
+        List<TeamEntity> savedTeam = teamService.mostWinnerMostLoser();
+
+        if (savedTeam != null)
+            return new ResponseEntity<>(teamService.mostWinnerMostLoser(), HttpStatus.FOUND);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

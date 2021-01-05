@@ -1,9 +1,18 @@
 package com.teamscollab.manager.core.service;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import com.teamscollab.manager.core.model.MatchEntity;
+import com.teamscollab.manager.core.model.TeamEntity;
 import com.teamscollab.manager.core.repository.MatchRepository;
+import com.teamscollab.manager.core.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -12,8 +21,129 @@ public class MatchServiceImpl implements MatchService {
     @Autowired
     private MatchRepository matchRepository;
 
+    @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
+
     @Override
     public MatchEntity getMatch(int i) {
         return matchRepository.getOne(i);
     }
+
+    @Override
+    public MatchEntity matchDataUpdater(MatchEntity match) {
+        if (match.getScoreA() > match.getScoreB()) { //time A ganha
+
+            //DECIDE O GANHADOR DA PARTIDA + SEU NOME
+            match.setTeamWinner(match.getTeamA().getName());
+
+            //ADICIONA VITÓRIAS AO CONTADOR DE VITÓRIAS E DERROTAS
+            match.getTeamA().setWins(match.getTeamA().getWins() + 1); //adiciona uma vitória ao time A
+            match.getTeamB().setLosses(match.getTeamB().getLosses() + 1); //adiciona uma derrota ao time B
+
+            //ADICIONA GOALS AOS TIMES
+            updateGoalsSettler(match);
+            matchRepository.save(match);
+        } else if (match.getScoreB() > match.getScoreA()) { // time B ganha
+
+            //DECIDE O GANHADOR DA PARTIDA + SEU NOME
+            match.setTeamWinner(match.getTeamB().getName());
+
+            //ADICIONA VITÓRIAS AO CONTADOR DE VITÓRIAS E DERROTAS
+            match.getTeamB().setWins(match.getTeamB().getWins() + 1); //adiciona uma vitória ao time A
+            match.getTeamA().setLosses(match.getTeamA().getLosses() + 1); //adiciona uma derrota ao time B
+
+            //ADICIONA GOALS AOS TIMES
+            updateGoalsSettler(match);
+            matchRepository.save(match);
+        } else {
+            updateGoalsSettler(match);
+            match.setTeamWinner("Draw");
+            matchRepository.save(match);
+        }
+
+        return match;
+    }
+
+    @Override
+    public List<MatchEntity> listAllMatches() {
+        return matchRepository.findAll();
+    }
+
+    @Override
+    public MatchEntity saveMatch(MatchEntity match) {
+        MatchEntity savedMatch = null;
+
+        if (match.getId() == null) {
+            TeamEntity teamA = teamRepository.getOne(match.getTeamA().getId());
+            TeamEntity teamB = teamRepository.getOne(match.getTeamB().getId());
+
+            if (teamA.getId() != null && teamB.getId() != null &&
+                    !teamB.getName().isEmpty() && !teamA.getName().isEmpty()) {
+
+                match.setTeamA(teamA);
+                match.setTeamB(teamB);
+                savedMatch = matchRepository.save(match);
+                matchDataUpdater(savedMatch);
+
+            } else {
+
+                match.setTeamA(teamA);
+                match.setTeamB(teamB);
+                savedMatch = matchRepository.save(match);
+
+            }
+        }
+
+        return savedMatch;
+    }
+
+    private void updateGoalsSettler(MatchEntity match) {
+
+        match.getTeamA().setGoalsMaden(match.getTeamA().getGoalsMaden() + match.getScoreA());
+        match.getTeamA().setGoalsTaken(match.getTeamA().getGoalsTaken() + match.getScoreB());
+        match.getTeamA().setGoalsBalance(match.getTeamA().getGoalsBalance() + match.getScoreA() - match.getScoreB());
+
+        match.getTeamB().setGoalsMaden(match.getTeamB().getGoalsMaden() + match.getScoreB());
+        match.getTeamB().setGoalsTaken(match.getTeamB().getGoalsTaken() + match.getScoreA());
+        match.getTeamB().setGoalsBalance(match.getTeamB().getGoalsBalance() + match.getScoreB() - match.getScoreA());
+    }
+
+    public MatchEntity greatestGoalsBalance() {
+        List<MatchEntity> matchToCompare = listAllMatches();
+
+        if (matchToCompare.isEmpty()) {
+            return null;
+        }
+
+        MatchEntity greatestMatch = matchToCompare.get(0);
+        int balanceMatch = Math.abs(greatestMatch.getScoreA() - greatestMatch.getScoreB());
+
+        for (MatchEntity comparingMatch : matchToCompare) {
+            int balanceNow = Math.abs(comparingMatch.getScoreA() - comparingMatch.getScoreB());
+
+            if (balanceNow >= balanceMatch) {
+
+                if (balanceNow == balanceMatch) {
+                    int goalSumA, goalSumB;
+
+                    goalSumA = comparingMatch.getScoreA() + comparingMatch.getScoreB();
+                    goalSumB = greatestMatch.getScoreA() + greatestMatch.getScoreB();
+
+                    if (goalSumA > goalSumB) {
+                        greatestMatch = comparingMatch;
+                        return greatestMatch;
+                    }
+                } else {
+                    greatestMatch = comparingMatch;
+                    balanceMatch = balanceNow;
+                }
+            }
+        }
+
+        return greatestMatch;
+    }
+
 }

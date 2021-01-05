@@ -8,6 +8,10 @@ public interface TeamService {
 
     TeamEntity createOrUpdateTeam(TeamEntity team);
 
+    TeamEntity listById (Integer id);
+
+    List<TeamEntity> mostWinnerMostLoser();
+
     void deleteTeam(Integer id);
 
     List<TeamEntity> listAllTeams();
