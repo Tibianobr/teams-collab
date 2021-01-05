@@ -13,6 +13,14 @@ public class MatchEntity {
     @Column(name = "match_id", nullable = false)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "team_a", referencedColumnName = "team_id", nullable = false)
+    private TeamEntity teamA;
+
+    @ManyToOne
+    @JoinColumn(name = "team_b", referencedColumnName = "team_id", nullable = false)
+    private TeamEntity teamB;
+
     @Basic
     @Column(name = "score_a")
     private Integer scoreA;
@@ -21,13 +29,17 @@ public class MatchEntity {
     @Column(name = "score_b")
     private Integer scoreB;
 
-    @ManyToOne
-    @JoinColumn(name = "team_a", referencedColumnName = "team_id")
-    private TeamEntity teamA;
+    private String teamWinner;
 
-    @ManyToOne
-    @JoinColumn(name = "team_b", referencedColumnName = "team_id")
-    private TeamEntity teamB;
+    public MatchEntity() {
+    }
+
+    public MatchEntity(TeamEntity teamA, TeamEntity teamB, Integer scoreA, Integer scoreB) {
+        this.teamA = teamA;
+        this.teamB = teamB;
+        this.scoreA = scoreA;
+        this.scoreB = scoreB;
+    }
 
     public Integer getId() {
         return id;
@@ -67,6 +79,14 @@ public class MatchEntity {
 
     public void setTeamB(TeamEntity teamB) {
         this.teamB = teamB;
+    }
+
+    public String getTeamWinner() {
+        return teamWinner;
+    }
+
+    public void setTeamWinner(String teamWinner) {
+        this.teamWinner = teamWinner;
     }
 }
 

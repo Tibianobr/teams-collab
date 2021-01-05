@@ -4,6 +4,7 @@ CREATE TABLE matches(
     team_b INTEGER,
 	score_a INTEGER,
 	score_b INTEGER,
+	team_winner VARCHAR(255),
 	CONSTRAINT fk_matches_team_a
       FOREIGN KEY(team_a)
 	  REFERENCES team(team_id),
