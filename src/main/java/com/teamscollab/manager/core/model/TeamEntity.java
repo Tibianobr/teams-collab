@@ -22,14 +22,24 @@ public class TeamEntity {
     @Column(name = "acron", length = 10)
     private String acron;
 
+    @Basic
+    @Column(name = "wins")
     private Integer wins = 0;
 
+    @Basic
+    @Column(name = "losses")
     private Integer losses = 0;
 
+    @Basic
+    @Column(name = "goals_maden")
     private Integer goalsMaden = 0;
 
+    @Basic
+    @Column(name = "goals_taken")
     private Integer goalsTaken = 0;
 
+    @Basic
+    @Column(name = "goals_balance")
     private Integer goalsBalance = 0;
 
     public Integer getId() {

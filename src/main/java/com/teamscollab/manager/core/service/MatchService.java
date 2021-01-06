@@ -11,11 +11,8 @@ public interface MatchService {
 
     MatchEntity matchDataUpdater(MatchEntity match);
 
-<<<<<<< HEAD
-=======
     boolean deleteMatch(Integer id);
 
->>>>>>> estrutura-codigo
     List<MatchEntity> listAllMatches();
 
     MatchEntity greatestGoalsBalance();

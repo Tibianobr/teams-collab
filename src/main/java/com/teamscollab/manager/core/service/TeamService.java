@@ -1,5 +1,6 @@
 package com.teamscollab.manager.core.service;
 
+import com.teamscollab.manager.core.model.MostWinnerMostLoser;
 import com.teamscollab.manager.core.model.TeamEntity;
 
 import java.util.List;
@@ -10,13 +11,9 @@ public interface TeamService {
 
     TeamEntity listById (Integer id);
 
-    List<TeamEntity> mostWinnerMostLoser();
+    MostWinnerMostLoser mostWinnerMostLoser();
 
-<<<<<<< HEAD
-    void deleteTeam(Integer id);
-=======
     boolean deleteTeam(Integer id);
->>>>>>> estrutura-codigo
 
     List<TeamEntity> listAllTeams();
 }

@@ -1,5 +1,6 @@
 package com.teamscollab.manager.core.controller;
 
+import com.teamscollab.manager.core.model.MostWinnerMostLoser;
 import com.teamscollab.manager.core.model.TeamEntity;
 import com.teamscollab.manager.core.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,17 +63,13 @@ public class TeamController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-<<<<<<< HEAD
-    @RequestMapping(value = "/data", method = RequestMethod.GET)
-=======
     @RequestMapping(value = "/winner-loser", method = RequestMethod.GET)
->>>>>>> estrutura-codigo
     public ResponseEntity<?> dataPeaks() {
-        List<TeamEntity> savedTeam = teamService.mostWinnerMostLoser();
+        MostWinnerMostLoser savedTeam = teamService.mostWinnerMostLoser();
 
-        if (savedTeam != null)
-            return new ResponseEntity<>(teamService.mostWinnerMostLoser(), HttpStatus.FOUND);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // if (savedTeam != null)
+        return new ResponseEntity<>(savedTeam, HttpStatus.FOUND);
+        // else
+        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
