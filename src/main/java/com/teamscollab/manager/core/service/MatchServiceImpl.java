@@ -73,7 +73,7 @@ public class MatchServiceImpl implements MatchService {
         if (match.getScoreA() > match.getScoreB()) { //time A ganha
 
             // DECIDE O GANHADOR DA PARTIDA + SEU NOME
-            match.setTeamWinner(match.getTeamA().getName());
+            match.setTeamWinner(match.getTeamA());
 
             // ADICIONA VITÓRIAS AO CONTADOR DE VITÓRIAS E DERROTAS
             match.getTeamA().setWins(match.getTeamA().getWins() + 1); //adiciona uma vitória ao time A
@@ -85,7 +85,7 @@ public class MatchServiceImpl implements MatchService {
         } else if (match.getScoreB() > match.getScoreA()) { // time B ganha
 
             // DECIDE O GANHADOR DA PARTIDA + SEU NOME
-            match.setTeamWinner(match.getTeamB().getName());
+            match.setTeamWinner(match.getTeamB());
 
             // ADICIONA VITÓRIAS AO CONTADOR DE VITÓRIAS E DERROTAS
             match.getTeamB().setWins(match.getTeamB().getWins() + 1); //adiciona uma vitória ao time A
@@ -96,7 +96,7 @@ public class MatchServiceImpl implements MatchService {
             matchRepository.save(match);
         } else {
             updateGoalsSettler(match);
-            match.setTeamWinner("Draw");
+            match.setTeamWinner(null);
             matchRepository.save(match);
         }
 

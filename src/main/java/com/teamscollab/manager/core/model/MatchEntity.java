@@ -29,17 +29,9 @@ public class MatchEntity {
     @Column(name = "score_b")
     private Integer scoreB;
 
-    private String teamWinner;
-
-    public MatchEntity() {
-    }
-
-    public MatchEntity(TeamEntity teamA, TeamEntity teamB, Integer scoreA, Integer scoreB) {
-        this.teamA = teamA;
-        this.teamB = teamB;
-        this.scoreA = scoreA;
-        this.scoreB = scoreB;
-    }
+    @ManyToOne
+    @JoinColumn(name = "team_winner", referencedColumnName = "team_id")
+    private TeamEntity teamWinner;
 
     public Integer getId() {
         return id;
@@ -81,11 +73,11 @@ public class MatchEntity {
         this.teamB = teamB;
     }
 
-    public String getTeamWinner() {
+    public TeamEntity getTeamWinner() {
         return teamWinner;
     }
 
-    public void setTeamWinner(String teamWinner) {
+    public void setTeamWinner(TeamEntity teamWinner) {
         this.teamWinner = teamWinner;
     }
 }
