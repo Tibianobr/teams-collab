@@ -25,7 +25,7 @@ public class TeamController {
     }
 
     // CREATE, UPDATE
-    @RequestMapping(value = "/register", method = {RequestMethod.POST, RequestMethod.PUT})
+    @RequestMapping(value = "/new", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<?> createOrUpdateTeam(@RequestBody TeamEntity team)
     {
         TeamEntity createdTeam = teamService.createOrUpdateTeam(team);
@@ -62,7 +62,11 @@ public class TeamController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+<<<<<<< HEAD
     @RequestMapping(value = "/data", method = RequestMethod.GET)
+=======
+    @RequestMapping(value = "/winner-loser", method = RequestMethod.GET)
+>>>>>>> estrutura-codigo
     public ResponseEntity<?> dataPeaks() {
         List<TeamEntity> savedTeam = teamService.mostWinnerMostLoser();
 

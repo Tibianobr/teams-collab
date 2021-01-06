@@ -29,6 +29,7 @@ public class MatchEntity {
     @Column(name = "score_b")
     private Integer scoreB;
 
+<<<<<<< HEAD
     private String teamWinner;
 
     public MatchEntity() {
@@ -40,6 +41,11 @@ public class MatchEntity {
         this.scoreA = scoreA;
         this.scoreB = scoreB;
     }
+=======
+    @ManyToOne
+    @JoinColumn(name = "team_winner", referencedColumnName = "team_id")
+    private TeamEntity teamWinner;
+>>>>>>> estrutura-codigo
 
     public Integer getId() {
         return id;
@@ -81,11 +87,19 @@ public class MatchEntity {
         this.teamB = teamB;
     }
 
+<<<<<<< HEAD
     public String getTeamWinner() {
         return teamWinner;
     }
 
     public void setTeamWinner(String teamWinner) {
+=======
+    public TeamEntity getTeamWinner() {
+        return teamWinner;
+    }
+
+    public void setTeamWinner(TeamEntity teamWinner) {
+>>>>>>> estrutura-codigo
         this.teamWinner = teamWinner;
     }
 }

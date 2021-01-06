@@ -12,7 +12,11 @@ public interface TeamService {
 
     List<TeamEntity> mostWinnerMostLoser();
 
+<<<<<<< HEAD
     void deleteTeam(Integer id);
+=======
+    boolean deleteTeam(Integer id);
+>>>>>>> estrutura-codigo
 
     List<TeamEntity> listAllTeams();
 }

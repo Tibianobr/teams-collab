@@ -42,6 +42,7 @@ public class MatchController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+<<<<<<< HEAD
     @RequestMapping(value = "/update-result/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> updateMatchResult(@PathVariable Integer id){
 
@@ -52,6 +53,19 @@ public class MatchController {
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
+=======
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteTeam(@PathVariable Integer id) {
+        boolean returnValue = matchService.deleteMatch(id);
+
+        if (returnValue)
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/difference", method = RequestMethod.GET)
+>>>>>>> estrutura-codigo
     public ResponseEntity<?> dataPeaks() {
         MatchEntity savedTeam = matchService.greatestGoalsBalance();
 

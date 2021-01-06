@@ -37,8 +37,13 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void deleteTeam(Integer id) {
+    public boolean deleteTeam(Integer id) {
+
+        if(!teamRepository.findById(id).isPresent())
+            return false;
+
         teamRepository.deleteById(id);
+        return true;
     }
 
     @Override
@@ -51,6 +56,14 @@ public class TeamServiceImpl implements TeamService {
         return teamRepository.getOne(id);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Returns two teams, containing the one with most wins and with most losses.
+     *
+     * @return List<TeamEntity> -> The team that has most wins, the team that has the most losses;
+     */
+>>>>>>> estrutura-codigo
     @Override
     public List<TeamEntity> mostWinnerMostLoser() {
 
