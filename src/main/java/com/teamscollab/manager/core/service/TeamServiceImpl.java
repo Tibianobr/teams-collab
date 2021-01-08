@@ -1,10 +1,12 @@
 package com.teamscollab.manager.core.service;
 
+import com.teamscollab.manager.core.model.MostWinnerMostLoser;
 import com.teamscollab.manager.core.model.TeamEntity;
 import com.teamscollab.manager.core.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,12 +38,52 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void deleteTeam(Integer id) {
+    public boolean deleteTeam(Integer id) {
+
+        if(!teamRepository.findById(id).isPresent())
+            return false;
+
         teamRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public List<TeamEntity> listAllTeams() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public TeamEntity listById (Integer id) {
+        return teamRepository.getOne(id);
+    }
+
+    /**
+     * Returns two teams, containing the one with most wins and with most losses.
+     *
+     * @return List<TeamEntity> -> The team that has most wins, the team that has the most losses;
+     */
+    @Override
+    public MostWinnerMostLoser mostWinnerMostLoser() {
+
+        List<TeamEntity> teamsToCompare = listAllTeams();
+
+        // Condição para caso não existam times
+        if(teamsToCompare.isEmpty())
+            return null;
+
+        TeamEntity winningTeam = new TeamEntity();
+        TeamEntity losingTeam = new TeamEntity();
+
+        for(TeamEntity comparingTeam : teamsToCompare) {
+            if (comparingTeam.getWins() > winningTeam.getWins()) {
+                winningTeam = comparingTeam;
+            }
+
+            if (comparingTeam.getLosses() > losingTeam.getLosses()) {
+                losingTeam = comparingTeam;
+            }
+        }
+
+        return new MostWinnerMostLoser(winningTeam, losingTeam);
     }
 }

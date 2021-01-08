@@ -1,0 +1,6 @@
+ALTER TABLE team
+ADD COLUMN wins INTEGER,
+ADD COLUMN losses INTEGER,
+ADD COLUMN goals_maden INTEGER,
+ADD COLUMN goals_taken INTEGER,
+ADD COLUMN goals_balance INTEGER;
