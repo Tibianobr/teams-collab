@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -71,19 +73,24 @@ public class TeamServiceImpl implements TeamService {
         if(teamsToCompare.isEmpty())
             return null;
 
-        TeamEntity winningTeam = new TeamEntity();
-        TeamEntity losingTeam = new TeamEntity();
+        HashMap<String,TeamEntity> result = calculateWinnerAndLoser(teamsToCompare);
+
+        return new MostWinnerMostLoser(result.get("Winner"),result.get("Loser"));
+    }
+
+    public HashMap<String, TeamEntity> calculateWinnerAndLoser(List<TeamEntity> teamsToCompare)
+    {
+        HashMap<String, TeamEntity> hashMap = new HashMap<>();
 
         for(TeamEntity comparingTeam : teamsToCompare) {
-            if (comparingTeam.getWins() > winningTeam.getWins()) {
-                winningTeam = comparingTeam;
+            if (!hashMap.containsKey("Winner") || comparingTeam.getWins() > hashMap.get("Winner").getWins()) {
+                hashMap.put("Winner",comparingTeam) ;
             }
 
-            if (comparingTeam.getLosses() > losingTeam.getLosses()) {
-                losingTeam = comparingTeam;
+            if (!hashMap.containsKey("Loser") || comparingTeam.getLosses() > hashMap.get("Loser").getLosses()) {
+                hashMap.put("Loser",comparingTeam);
             }
         }
-
-        return new MostWinnerMostLoser(winningTeam, losingTeam);
+        return hashMap;
     }
 }
